@@ -35,7 +35,10 @@ func (l *Load) work(num int) {
 		if l.Q > 0 {
 			<-t
 		}
-		res, err := client.Do(l.BaseRequest)
+		r := new(http.Request)
+		*r = *l.BaseRequest
+		// res, err := client.Do(l.BaseRequest)
+		res, err := client.Do(r)
 		// TODO: it seems forgetting this will also cause file descriptor problem
 		// res.Body.Close()
 		if err != nil {
