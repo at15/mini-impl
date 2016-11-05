@@ -5,6 +5,8 @@
 ## Key points 
 
 - go lang currency 
+- net/http/httptrace
+- aggregate data
 
 ## Ref 
 
