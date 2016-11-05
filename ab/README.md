@@ -12,6 +12,11 @@
 
 - [ ] the QPS in `hey` means QPS per worker? 
 
+## NOTE
+
+- need to change the file descriptor. `ulimit -n` show current one `ulimit -n 4096` to set limit in current shell. 
+- the max file descriptor can be found using `cat /proc/sys/fs/file-max`
+
 ## Ref 
 
 - https://github.com/rakyll/hey

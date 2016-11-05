@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"os"
 	"sync"
+	"time"
 )
 
 // Load defines the workload
@@ -17,13 +18,25 @@ type Load struct {
 	N int
 	// C is concurrent number
 	C int
+	// Q is the QPS of every worker
+	Q int
 }
 
 func (l *Load) work(num int) {
+	var t <-chan time.Time
 	client := http.Client{}
-	// TODO: QPS
+	if l.Q > 0 {
+		log.Printf("QPS is %d", l.Q)
+		t = time.Tick(time.Duration(1e6/l.Q) * time.Microsecond)
+	}
 	for i := 0; i < num; i++ {
-		_, err := client.Do(l.BaseRequest)
+		// TODO: do we need to put initial value into t? I think not
+		if l.Q > 0 {
+			<-t
+		}
+		res, err := client.Do(l.BaseRequest)
+		// TODO: it seems forgetting this will also cause file descriptor problem
+		res.Body.Close()
 		if err != nil {
 			log.Print(err)
 		}

@@ -16,9 +16,15 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	total := 1000
+	// total := 1000
+	total := 10000
+
 	concurent := 10
-	l := ab.Load{BaseRequest: r, N: total, C: concurent}
+	// qps := 500
+	qps := 50
+	// qps := 0
+
+	l := ab.Load{BaseRequest: r, N: total, C: concurent, Q: qps}
 	l.Run()
 
 }
