@@ -16,6 +16,7 @@
 
 - need to change the file descriptor. `ulimit -n` show current one `ulimit -n 4096` to set limit in current shell. 
 - the max file descriptor can be found using `cat /proc/sys/fs/file-max`
+- `invalid memory address or nil pointer dereference`
 
 ## Ref 
 

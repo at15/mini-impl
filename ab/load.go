@@ -2,6 +2,7 @@ package ab
 
 import (
 	"io"
+	"io/ioutil"
 	"log"
 	"net/http"
 	"os"
@@ -36,9 +37,13 @@ func (l *Load) work(num int) {
 		}
 		res, err := client.Do(l.BaseRequest)
 		// TODO: it seems forgetting this will also cause file descriptor problem
-		res.Body.Close()
+		// res.Body.Close()
 		if err != nil {
 			log.Print(err)
+		} else {
+			io.Copy(ioutil.Discard, res.Body)
+			// FIXME: now the request is canceled
+			res.Body.Close()
 		}
 	}
 }

@@ -16,8 +16,8 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	// total := 1000
-	total := 10000
+	total := 1000
+	// total := 10000
 
 	concurent := 10
 	// qps := 500
