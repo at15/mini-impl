@@ -36,7 +36,12 @@ type result struct {
 
 func (l *Load) work(num int) {
 	var t <-chan time.Time
-	client := http.Client{Timeout: time.Duration(l.T) * time.Second}
+	// FIXED: this solve the connect: cannot assign requested address problem
+	tr := &http.Transport{}
+	client := http.Client{Transport: tr, Timeout: time.Duration(l.T) * time.Second}
+
+	// FIXME: this does not reuse connection
+	// client := http.Client{Timeout: time.Duration(l.T) * time.Second}
 	if l.Q > 0 {
 		log.Printf("QPS is %d", l.Q)
 		t = time.Tick(time.Duration(1e6/l.Q) * time.Microsecond)

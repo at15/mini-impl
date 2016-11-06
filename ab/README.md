@@ -11,7 +11,7 @@
 ## TODO
 
 - [ ] the QPS in `hey` means QPS per worker? 
-- [ ] timeout in both client and server https://blog.cloudflare.com/the-complete-guide-to-golang-net-http-timeouts/
+- [x] timeout in both client and server https://blog.cloudflare.com/the-complete-guide-to-golang-net-http-timeouts/
 
 ## NOTE
 
@@ -23,7 +23,8 @@
 - `connect: cannot assign requested address` https://github.com/golang/go/issues/16012 seems need to set maxidle connection per host
 run `ab/ab/main` serveral times and this problem will appear
     - [OS does not release port right after the connection is closed](http://grokbase.com/t/gg/golang-nuts/156b4z7w57/go-nuts-dial-tcp-127-0-0-1-3333-cant-assign-requested-address-when-calling-http-get-too-quickly)
-
+    - running hey several times does not have this problem 
+    - need to specify transport for client in order to reuse connection (TODO: why not do it by default)
 
 ## Ref 
 
