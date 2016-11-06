@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"os"
 	"os/signal"
+	"time"
 )
 
 // simply print the http protocol
@@ -35,9 +36,20 @@ func main() {
 		os.Exit(1)
 	}()
 
-	http.HandleFunc("/", handler)
+	// https://blog.cloudflare.com/the-complete-guide-to-golang-net-http-timeouts/
+	server := &http.Server{
+		ReadTimeout:  5 * time.Second,
+		WriteTimeout: 10 * time.Second,
+	}
 
-	err := http.ListenAndServe("localhost:"+port, nil)
+	mux := http.NewServeMux()
+	mux.HandleFunc("/", handler)
+	// mux.Handler()
+	// server.Handler(mux)
+	server.Handler = mux
+	server.Addr = "localhost:" + port
+	// err := server.ListenAndServe("localhost:"+port, nil)
+	err := server.ListenAndServe()
 
 	// https://gist.github.com/denji/12b3a568f092ab951456
 	// openssl req -x509 -nodes -newkey rsa:2048 -keyout server.rsa.key -out server.rsa.crt -days 3650

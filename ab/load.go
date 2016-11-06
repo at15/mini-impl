@@ -21,11 +21,13 @@ type Load struct {
 	C int
 	// Q is the QPS of every worker
 	Q int
+	// T is the timeout
+	T int
 }
 
 func (l *Load) work(num int) {
 	var t <-chan time.Time
-	client := http.Client{}
+	client := http.Client{Timeout: time.Duration(l.T) * time.Second}
 	if l.Q > 0 {
 		log.Printf("QPS is %d", l.Q)
 		t = time.Tick(time.Duration(1e6/l.Q) * time.Microsecond)
@@ -64,7 +66,7 @@ func (l *Load) Run() {
 
 	log.Print("issue a single request to check if server is running")
 	// make a single request
-	client := http.Client{}
+	client := http.Client{Timeout: time.Duration(l.T) * time.Second}
 	res, err := client.Do(l.BaseRequest)
 	if err != nil {
 		log.Fatal(err)
