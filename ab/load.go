@@ -23,6 +23,15 @@ type Load struct {
 	Q int
 	// T is the timeout
 	T int
+	// TODO: why use channel instead of array
+	results chan *result
+	report  *report
+}
+
+type result struct {
+	err      error
+	code     int
+	duration time.Duration
 }
 
 func (l *Load) work(num int) {
@@ -39,10 +48,15 @@ func (l *Load) work(num int) {
 		}
 		r := new(http.Request)
 		*r = *l.BaseRequest
+
+		s := time.Now()
+
 		// res, err := client.Do(l.BaseRequest)
 		res, err := client.Do(r)
 		// TODO: it seems forgetting this will also cause file descriptor problem
 		// res.Body.Close()
+		t := time.Now()
+		code := 0
 		if err != nil {
 			log.Print(err)
 		} else {
@@ -50,6 +64,11 @@ func (l *Load) work(num int) {
 			// FIXME: now the request is canceled
 			res.Body.Close()
 		}
+		if res != nil {
+			code = res.StatusCode
+		}
+		result := &result{duration: t.Sub(s), err: err, code: code}
+		l.results <- result
 	}
 }
 
@@ -74,6 +93,9 @@ func (l *Load) Run() {
 	io.Copy(os.Stdout, res.Body)
 	res.Body.Close()
 
+	l.results = make(chan *result, l.N)
+	defer close(l.results)
+
 	log.Print("start generating load")
 	var wg sync.WaitGroup
 	wg.Add(l.C)
@@ -86,4 +108,10 @@ func (l *Load) Run() {
 	wg.Wait()
 	log.Print("load finished")
 
+	l.report = newReport(l.results)
+	l.report.finalize()
+}
+
+func (l *Load) PrintReport() {
+	l.report.print()
 }

@@ -27,5 +27,6 @@ func main() {
 	timeout := 20
 	l := ab.Load{BaseRequest: r, N: total, C: concurent, Q: qps, T: timeout}
 	l.Run()
+	l.PrintReport()
 
 }
