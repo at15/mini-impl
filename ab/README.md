@@ -22,6 +22,8 @@
 - MUST make shallow copy of request, otherwise `res.Body.Close()` would cause all the reuqest being cancelled
 - `connect: cannot assign requested address` https://github.com/golang/go/issues/16012 seems need to set maxidle connection per host
 run `ab/ab/main` serveral times and this problem will appear
+    - [OS does not release port right after the connection is closed](http://grokbase.com/t/gg/golang-nuts/156b4z7w57/go-nuts-dial-tcp-127-0-0-1-3333-cant-assign-requested-address-when-calling-http-get-too-quickly)
+
 
 ## Ref 
 
