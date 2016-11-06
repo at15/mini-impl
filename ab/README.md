@@ -1,6 +1,13 @@
 # AB
 
 - [Void HTTP Server](server)
+- [Load](load.go)
+
+## Usage 
+
+- `cd server && go run main.go` to start a http server on `localhost:8000`, everything is hard coded, https code is commented out.
+- `cd ab && go run main.go` to make request to `localhost:8000`, everything is hard coded right now
+
 
 ## Key points 
 
