@@ -1,0 +1,5 @@
+package: github.com/at15/mini-impl/wktime
+import:
+- package: github.com/elazarl/goproxy
+  vcs: git
+  version: 6016d2397298b0750eeb06f4d24e03cfd7e45c77
