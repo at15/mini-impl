@@ -36,7 +36,7 @@ Actually it's pretty close to CMPS203 assignment https://github.com/at15/CMPS203
 
 `info` is a variant type, which could be a tuple (string, int, int) labeled as FI, or UNKNOWN:q:""
 
-````
+````ocaml
 module Error = struct
 type info = FI of string * int * int | UNKNOWN
 end
@@ -46,7 +46,7 @@ type info = Error.info
 
 and in
 
-````
+````ocaml
 let printInfo =
   (* In the text of the book, file positions in error messages are replaced
      with the string "Error:" *)
